@@ -72,6 +72,7 @@ function App() {
       <button onClick={fetchRandomGif} className="btn btn-primary mt-3 mb-5" type="button">
         Or click here to get a random gif!
       </button>
+      {searchValue && <h3>Search results for: {searchValue}</h3>}
 
       <GifDisplay gifUrl={gifUrl} />
       {searchValue && (
