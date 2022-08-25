@@ -16,16 +16,13 @@ function App() {
 
   const fetchRandomGif = async () => {
     const data = await fetchData(randomGifUrl);
-    return data.data.embed_url;
+    setGifUrl(data.data.embed_url);
   };
 
   useEffect(() => {
-    const getRandomGif = async () => {
-      const randomGifUrl = await fetchRandomGif();
-      setGifUrl(randomGifUrl);
-    };
-
-    getRandomGif();
+    (async () => {
+      await fetchRandomGif();
+    })();
 
     return () => {};
   }, []);
@@ -33,7 +30,7 @@ function App() {
   return (
     <div className="App">
       <h1>Giphy</h1>
-      <button className="btn btn-primary mt-5 mb-5" type="button">
+      <button onClick={fetchRandomGif} className="btn btn-primary mt-5 mb-5" type="button">
         Get random gif!
       </button>
       <GifDisplay gifUrl={gifUrl} />
