@@ -7,6 +7,7 @@ const Search = ({ setSearchValue }) => {
     ev.preventDefault();
     const searchValue = searchInput.current.value;
     setSearchValue(searchValue);
+    searchInput.current.value = "";
   };
 
   return (
