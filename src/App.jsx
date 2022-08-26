@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import GifDisplay from "./components/GifDisplay";
 import SearchForm from "./components/SearchForm";
 import Favorites from "./components/Favorites";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Favorite from "@mui/icons-material/Favorite";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 
 function App() {
   console.log("app rerendered");
@@ -21,6 +25,7 @@ function App() {
 
   // for favorites
   const [favoriteGifs, setFavoriteGifs] = useState([]);
+  const [isChecked, setIsChecked] = useState("");
 
   const fetchData = async (url) => {
     const response = await fetch(url);
@@ -65,6 +70,17 @@ function App() {
     setFavoriteGifs(updatedFavorites);
   };
 
+  const updateFavorites = (ev) => {
+    if (ev.target.checked) {
+      addToFavorites(gifUrl);
+      setIsChecked(true);
+    } else {
+      // remove from favs
+      removeFromFavorites(gifUrl);
+      setIsChecked(false);
+    }
+  };
+
   // Mounting
   useEffect(() => {
     fetchRandomGif();
@@ -80,6 +96,12 @@ function App() {
   useEffect(() => {
     setGifUrl(gifUrls[gifIdx]);
   }, [gifIdx]);
+
+  useEffect(() => {
+    if (gifUrl) {
+      setIsChecked(favoriteGifs.includes(gifUrl));
+    }
+  }, [gifUrl]);
 
   return (
     <div className="App">
@@ -106,7 +128,24 @@ function App() {
               addToFavorites={addToFavorites}
               removeFromFavorites={removeFromFavorites}
             />
-
+            <div
+              style={{
+                margin: "auto",
+                display: "block",
+                width: "fit-content",
+              }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={updateFavorites}
+                    icon={<FavoriteBorder />}
+                    checked={isChecked}
+                    checkedIcon={<Favorite color="error" />}
+                    name="checkedH"
+                  />
+                }
+              />
+            </div>
             {searchValue && !isLoading && gifUrls.length > 1 && (
               <button onClick={incrementGifIdx} className="btn btn-warning mt-3" type="button">
                 Next
