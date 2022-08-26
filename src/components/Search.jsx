@@ -1,6 +1,8 @@
 import { useRef } from "react";
 
 const Search = ({ setSearchValue }) => {
+  console.log("search rerendered")
+
   const searchInput = useRef();
 
   const handleOnSubmit = (ev) => {

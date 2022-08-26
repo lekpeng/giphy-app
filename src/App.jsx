@@ -5,6 +5,7 @@ import Search from "./components/Search";
 import Favorites from "./components/Favorites";
 
 function App() {
+  console.log("app rerendered")
   const apiKey = "KbEuISuaXSXLHMNJBj853fsn260Ak0Fs";
   const randomGifUrl = `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`;
   const searchGifUrlBase = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&limit=10&q=`;

@@ -5,7 +5,7 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { useRef } from "react";
 
 const GifDisplay = ({ gifUrl, isLoading }) => {
-  console.log("gifUrl", gifUrl);
+  console.log("gif display rerendered");
   const likeInput = useRef();
 
   const toggleLike = (ev) => {
