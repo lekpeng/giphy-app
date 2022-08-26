@@ -2,19 +2,30 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Favorite from "@mui/icons-material/Favorite";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
-const GifDisplay = ({ gifUrl, isLoading }) => {
-  console.log("gif display rerendered");
-  const likeInput = useRef();
+const GifDisplay = ({ gifUrl, isLoading, favoriteGifs, addToFavorites, removeFromFavorites }) => {
+  const [isChecked, setIsChecked] = useState("");
 
-  const toggleLike = (ev) => {
+  useEffect(() => {
+    if (gifUrl) {
+      setIsChecked(favoriteGifs.includes(gifUrl));
+    }
+  }, []);
+
+  const updateFavorites = (ev) => {
     if (ev.target.checked) {
-      // add to favs
+      addToFavorites(gifUrl);
+      setIsChecked(true);
     } else {
       // remove from favs
+      removeFromFavorites(gifUrl);
+      setIsChecked(false);
     }
   };
+
+  console.log("favoriteGifs.includes(gifUrl)", favoriteGifs.includes(gifUrl));
+
   return (
     <div className="gif-display">
       {!isLoading ? (
@@ -35,11 +46,11 @@ const GifDisplay = ({ gifUrl, isLoading }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  onClick={toggleLike}
+                  onChange={updateFavorites}
                   icon={<FavoriteBorder />}
+                  checked={isChecked}
                   checkedIcon={<Favorite color="error" />}
                   name="checkedH"
-                  ref={likeInput}
                 />
               }
             />

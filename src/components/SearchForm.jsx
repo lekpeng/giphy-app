@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
-const Search = ({ setSearchValue }) => {
-  console.log("search rerendered")
+const SearchForm = ({ setSearchValue }) => {
+  console.log("search rerendered");
 
   const searchInput = useRef();
 
@@ -32,4 +32,4 @@ const Search = ({ setSearchValue }) => {
   );
 };
 
-export default Search;
+export default SearchForm;

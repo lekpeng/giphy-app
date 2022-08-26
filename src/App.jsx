@@ -1,11 +1,11 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import GifDisplay from "./components/GifDisplay";
-import Search from "./components/Search";
+import SearchForm from "./components/SearchForm";
 import Favorites from "./components/Favorites";
 
 function App() {
-  console.log("app rerendered")
+  console.log("app rerendered");
   const apiKey = "KbEuISuaXSXLHMNJBj853fsn260Ak0Fs";
   const randomGifUrl = `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`;
   const searchGifUrlBase = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&limit=10&q=`;
@@ -18,6 +18,9 @@ function App() {
 
   // for gif display
   const [gifUrl, setGifUrl] = useState("");
+
+  // for favorites
+  const [favoriteGifs, setFavoriteGifs] = useState([]);
 
   const fetchData = async (url) => {
     const response = await fetch(url);
@@ -50,6 +53,18 @@ function App() {
     }
   };
 
+  const addToFavorites = (favGif) => {
+    const updatedFavorites = [favGif, ...favoriteGifs];
+    setFavoriteGifs(updatedFavorites);
+  };
+
+  const removeFromFavorites = (favGif) => {
+    const updatedFavorites = [...favoriteGifs];
+    const idxOfGifToRemove = updatedFavorites.indexOf(favGif);
+    updatedFavorites.splice(idxOfGifToRemove, 1);
+    setFavoriteGifs(updatedFavorites);
+  };
+
   // Mounting
   useEffect(() => {
     fetchRandomGif();
@@ -73,7 +88,7 @@ function App() {
         <div className="col-8">
           <div className="main">
             <h1 className="mb-5">Giphy</h1>
-            <Search setSearchValue={setSearchValue} />
+            <SearchForm setSearchValue={setSearchValue} />
             <button onClick={fetchRandomGif} className="btn btn-primary mt-3 mb-5" type="button">
               Or click here to get a random gif!
             </button>
@@ -84,7 +99,13 @@ function App() {
             )}
             {searchValue && !isLoading && gifUrls.length === 0 && <p>No search results</p>}
 
-            <GifDisplay gifUrl={gifUrl} isLoading={isLoading} />
+            <GifDisplay
+              gifUrl={gifUrl}
+              isLoading={isLoading}
+              favoriteGifs={favoriteGifs}
+              addToFavorites={addToFavorites}
+              removeFromFavorites={removeFromFavorites}
+            />
 
             {searchValue && !isLoading && gifUrls.length > 1 && (
               <button onClick={incrementGifIdx} className="btn btn-warning mt-3" type="button">
@@ -94,7 +115,7 @@ function App() {
           </div>
         </div>
         <div className="col-2">
-          <Favorites />
+          <Favorites favoriteGifs={favoriteGifs} />
         </div>
       </div>
     </div>
