@@ -1,30 +1,5 @@
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Favorite from "@mui/icons-material/Favorite";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import { useRef, useState, useEffect } from "react";
-
-const GifDisplay = ({ gifUrl, isLoading, favoriteGifs, addToFavorites, removeFromFavorites }) => {
-  // const [isChecked, setIsChecked] = useState("");
-
-  // useEffect(() => {
-  //   if (gifUrl) {
-  //     setIsChecked(favoriteGifs.includes(gifUrl));
-  //   }
-  // }, [gifUrl]);
-
-  // const updateFavorites = (ev) => {
-  //   if (ev.target.checked) {
-  //     addToFavorites(gifUrl);
-  //     setIsChecked(true);
-  //   } else {
-  //     // remove from favs
-  //     removeFromFavorites(gifUrl);
-  //     setIsChecked(false);
-  //   }
-  // };
-
-  console.log("favoriteGifs.includes(gifUrl)", favoriteGifs.includes(gifUrl));
+const GifDisplay = ({ gifUrl, isLoading, favoriteGifs }) => {
+  console.log("gif display rerendered");
 
   return (
     <div className="gif-display">

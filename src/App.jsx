@@ -121,13 +121,7 @@ function App() {
             )}
             {searchValue && !isLoading && gifUrls.length === 0 && <p>No search results</p>}
 
-            <GifDisplay
-              gifUrl={gifUrl}
-              isLoading={isLoading}
-              favoriteGifs={favoriteGifs}
-              addToFavorites={addToFavorites}
-              removeFromFavorites={removeFromFavorites}
-            />
+            <GifDisplay gifUrl={gifUrl} isLoading={isLoading} favoriteGifs={favoriteGifs} />
             <div
               style={{
                 margin: "auto",
@@ -154,7 +148,7 @@ function App() {
           </div>
         </div>
         <div className="col-2">
-          <Favorites favoriteGifs={favoriteGifs} />
+          <Favorites favoriteGifs={favoriteGifs} setGifUrl={setGifUrl} />
         </div>
       </div>
     </div>
