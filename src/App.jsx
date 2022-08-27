@@ -8,7 +8,6 @@ import FavoriteButton from "./components/FavoriteButton";
 import { fetchRandomGif, fetchSearchGifs } from "./utils/api";
 
 function App() {
-  console.log("app rerendered");
 
   // for search function
   const [searchValue, setSearchValue] = useState("");
@@ -64,7 +63,6 @@ function App() {
       addToFavorites(gifUrl);
       setGifIsFavorited(true);
     } else {
-      // remove from favs
       removeFromFavorites(gifUrl);
       setGifIsFavorited(false);
     }

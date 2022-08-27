@@ -1,5 +1,4 @@
 const GifDisplay = ({ gifUrl, gifIsLoading }) => {
-  console.log("gif display rerendered");
 
   return (
     <div className="gif-display">

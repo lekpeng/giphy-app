@@ -1,5 +1,4 @@
 const Favorites = ({ favoriteGifUrls, setGifUrl }) => {
-  console.log("favorites rerendered");
 
   return (
     <div>
