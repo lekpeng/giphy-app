@@ -1,16 +1,17 @@
-const Favorites = ({ favoriteGifs, setGifUrl }) => {
+const Favorites = ({ favoriteGifUrls, setGifUrl }) => {
   console.log("favorites rerendered");
 
   return (
     <div>
       <h3>Favorites</h3>
-      {favoriteGifs?.map((favoriteGif) => {
+      <p>Hover to see in main view!</p>
+      {favoriteGifUrls?.map((favoriteGifUrl) => {
         return (
           <iframe
-            src={favoriteGif}
+            src={favoriteGifUrl}
             onMouseEnter={(e) => {
               e.preventDefault();
-              setGifUrl(favoriteGif);
+              setGifUrl(favoriteGifUrl);
             }}
             width="120"
             height="67.5"

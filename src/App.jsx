@@ -2,11 +2,9 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import GifDisplay from "./components/GifDisplay";
 import SearchForm from "./components/SearchForm";
+import SearchResults from "./components/SearchResults";
 import Favorites from "./components/Favorites";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Favorite from "@mui/icons-material/Favorite";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import FavoriteButton from "./components/FavoriteButton";
 import { fetchRandomGif, fetchSearchGifs } from "./utils/api";
 
 function App() {
@@ -15,60 +13,60 @@ function App() {
   // for search function
   const [searchValue, setSearchValue] = useState("");
   const [gifUrls, setGifUrls] = useState([]);
-  const [gifIdx, setGifIdx] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [gifUrlIdx, setGifUrlIdx] = useState(0);
 
   // for gif display
+  const [gifIsLoading, setGifIsLoading] = useState(false);
   const [gifUrl, setGifUrl] = useState("");
 
   // for favorites
-  const [favoriteGifs, setFavoriteGifs] = useState([]);
-  const [isChecked, setIsChecked] = useState("");
+  const [favoriteGifUrls, setFavoriteGifUrls] = useState([]);
+  const [gifIsFavorited, setGifIsFavorited] = useState(false);
 
   const getRandomGif = async () => {
-    setIsLoading(true);
+    setGifIsLoading(true);
     setSearchValue("");
     const embeddedUrl = await fetchRandomGif();
     setGifUrl(embeddedUrl);
-    setIsLoading(false);
+    setGifIsLoading(false);
   };
 
   const getSearchGifs = async () => {
-    setIsLoading(true);
+    setGifIsLoading(true);
     const embeddedUrls = await fetchSearchGifs(searchValue);
     setGifUrls(embeddedUrls);
     setGifUrl(embeddedUrls[0]);
-    setIsLoading(false);
+    setGifIsLoading(false);
   };
 
   const incrementGifIdx = () => {
-    if (gifIdx < gifUrls.length - 1) {
-      setGifIdx(gifIdx + 1);
+    if (gifUrlIdx < gifUrls.length - 1) {
+      setGifUrlIdx(gifUrlIdx + 1);
     } else {
-      setGifIdx(0);
+      setGifUrlIdx(0);
     }
   };
 
   const addToFavorites = (favGif) => {
-    const updatedFavorites = [favGif, ...favoriteGifs];
-    setFavoriteGifs(updatedFavorites);
+    const updatedFavorites = [favGif, ...favoriteGifUrls];
+    setFavoriteGifUrls(updatedFavorites);
   };
 
   const removeFromFavorites = (favGif) => {
-    const updatedFavorites = [...favoriteGifs];
+    const updatedFavorites = [...favoriteGifUrls];
     const idxOfGifToRemove = updatedFavorites.indexOf(favGif);
     updatedFavorites.splice(idxOfGifToRemove, 1);
-    setFavoriteGifs(updatedFavorites);
+    setFavoriteGifUrls(updatedFavorites);
   };
 
   const updateFavorites = (ev) => {
     if (ev.target.checked) {
       addToFavorites(gifUrl);
-      setIsChecked(true);
+      setGifIsFavorited(true);
     } else {
       // remove from favs
       removeFromFavorites(gifUrl);
-      setIsChecked(false);
+      setGifIsFavorited(false);
     }
   };
 
@@ -85,14 +83,16 @@ function App() {
   }, [searchValue]);
 
   useEffect(() => {
-    setGifUrl(gifUrls[gifIdx]);
-  }, [gifIdx]);
+    setGifUrl(gifUrls[gifUrlIdx]);
+  }, [gifUrlIdx]);
 
   useEffect(() => {
     if (gifUrl) {
-      setIsChecked(favoriteGifs.includes(gifUrl));
+      setGifIsFavorited(favoriteGifUrls.includes(gifUrl));
     }
   }, [gifUrl]);
+
+  const canRenderNextButton = searchValue && !gifIsLoading && gifUrls.length > 1;
 
   return (
     <div className="App">
@@ -105,34 +105,20 @@ function App() {
             <button onClick={getRandomGif} className="btn btn-primary mt-3 mb-5" type="button">
               Or click here to get a random gif!
             </button>
-            {searchValue ? (
-              <h3>Search results for: {searchValue}</h3>
-            ) : (
-              <h3>Here's your random gif</h3>
-            )}
-            {searchValue && !isLoading && gifUrls.length === 0 && <p>No search results</p>}
+            <SearchResults
+              searchValue={searchValue}
+              gifUrls={gifUrls}
+              gifIsLoading={gifIsLoading}
+            />
 
-            <GifDisplay gifUrl={gifUrl} isLoading={isLoading} favoriteGifs={favoriteGifs} />
-            <div
-              style={{
-                margin: "auto",
-                display: "block",
-                width: "fit-content",
-              }}>
-              <FormControlLabel
-                style={{ margin: "0" }}
-                control={
-                  <Checkbox
-                    onChange={updateFavorites}
-                    icon={<FavoriteBorder />}
-                    checked={isChecked}
-                    checkedIcon={<Favorite color="error" />}
-                    name="checkedH"
-                  />
-                }
-              />
-            </div>
-            {searchValue && !isLoading && gifUrls.length > 1 && (
+            <GifDisplay
+              gifUrl={gifUrl}
+              gifIsLoading={gifIsLoading}
+              favoriteGifUrls={favoriteGifUrls}
+            />
+            <FavoriteButton gifIsFavorited={gifIsFavorited} updateFavorites={updateFavorites} />
+
+            {canRenderNextButton && (
               <button onClick={incrementGifIdx} className="btn btn-warning mt-3" type="button">
                 Next
               </button>
@@ -140,7 +126,7 @@ function App() {
           </div>
         </div>
         <div className="col-2">
-          <Favorites favoriteGifs={favoriteGifs} setGifUrl={setGifUrl} />
+          <Favorites favoriteGifUrls={favoriteGifUrls} setGifUrl={setGifUrl} />
         </div>
       </div>
     </div>

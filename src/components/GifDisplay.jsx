@@ -1,9 +1,9 @@
-const GifDisplay = ({ gifUrl, isLoading }) => {
+const GifDisplay = ({ gifUrl, gifIsLoading }) => {
   console.log("gif display rerendered");
 
   return (
     <div className="gif-display">
-      {!isLoading ? (
+      {!gifIsLoading ? (
         <div>
           <iframe
             src={gifUrl}
