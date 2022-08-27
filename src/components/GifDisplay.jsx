@@ -1,5 +1,4 @@
 const GifDisplay = ({ gifUrl, gifIsLoading }) => {
-
   return (
     <div className="gif-display">
       {!gifIsLoading ? (
