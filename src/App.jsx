@@ -7,12 +7,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Favorite from "@mui/icons-material/Favorite";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import { fetchRandomGif, fetchSearchGifs } from "./utils/api";
 
 function App() {
   console.log("app rerendered");
-  const apiKey = "KbEuISuaXSXLHMNJBj853fsn260Ak0Fs";
-  const randomGifUrl = `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}`;
-  const searchGifUrlBase = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&limit=10&q=`;
 
   // for search function
   const [searchValue, setSearchValue] = useState("");
@@ -27,24 +25,17 @@ function App() {
   const [favoriteGifs, setFavoriteGifs] = useState([]);
   const [isChecked, setIsChecked] = useState("");
 
-  const fetchData = async (url) => {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  };
-
-  const fetchRandomGif = async () => {
+  const getRandomGif = async () => {
     setIsLoading(true);
     setSearchValue("");
-    const data = await fetchData(randomGifUrl);
-    setGifUrl(data.data.embed_url);
+    const embeddedUrl = await fetchRandomGif();
+    setGifUrl(embeddedUrl);
     setIsLoading(false);
   };
 
-  const fetchSearchGifs = async () => {
+  const getSearchGifs = async () => {
     setIsLoading(true);
-    const data = await fetchData(searchGifUrlBase + searchValue);
-    const embeddedUrls = data.data.map((gif) => gif.embed_url);
+    const embeddedUrls = await fetchSearchGifs(searchValue);
     setGifUrls(embeddedUrls);
     setGifUrl(embeddedUrls[0]);
     setIsLoading(false);
@@ -83,13 +74,13 @@ function App() {
 
   // Mounting
   useEffect(() => {
-    fetchRandomGif();
+    getRandomGif();
   }, []);
 
   // Updating
   useEffect(() => {
     if (searchValue) {
-      fetchSearchGifs();
+      getSearchGifs();
     }
   }, [searchValue]);
 
@@ -111,7 +102,7 @@ function App() {
           <div className="main">
             <h1 className="mb-5">Giphy</h1>
             <SearchForm setSearchValue={setSearchValue} />
-            <button onClick={fetchRandomGif} className="btn btn-primary mt-3 mb-5" type="button">
+            <button onClick={getRandomGif} className="btn btn-primary mt-3 mb-5" type="button">
               Or click here to get a random gif!
             </button>
             {searchValue ? (
@@ -129,6 +120,7 @@ function App() {
                 width: "fit-content",
               }}>
               <FormControlLabel
+                style={{ margin: "0" }}
                 control={
                   <Checkbox
                     onChange={updateFavorites}

@@ -1,4 +1,4 @@
-const GifDisplay = ({ gifUrl, isLoading, favoriteGifs }) => {
+const GifDisplay = ({ gifUrl, isLoading }) => {
   console.log("gif display rerendered");
 
   return (
